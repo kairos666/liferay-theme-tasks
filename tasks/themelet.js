@@ -107,7 +107,7 @@ module.exports = function(options) {
 
 					var FORWARD_SLASH = '/';
 
-					filePath = FORWARD_SLASH + themeName + FORWARD_SLASH + filePath.replace(/(.*)(js\/.*)/, '$2');
+					filePath = FORWARD_SLASH + 'o/' + themeName + FORWARD_SLASH + filePath.replace(/(.*)(js\/.*)/, '$2');
 
 					return '<script src="' + filePath + '"></script>';
 				}
