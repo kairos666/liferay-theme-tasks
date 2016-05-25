@@ -151,7 +151,7 @@ module.exports = function(options) {
 	}
 
 	function buildStaticThemeletFiles(dirName, fileTypes, cb) {
-		var srcFiles = '*';
+		var srcFiles = '**/*';
 
 		if (fileTypes) {
 			srcFiles += fileTypes;
