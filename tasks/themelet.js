@@ -33,7 +33,7 @@ module.exports = function(options) {
 	});
 
 	gulp.task('build:themelet-css-inject', function(cb) {
-		var themeSrcPaths = path.join(pathBuild, 'css/themelets/**/*.+(css|scss)');
+		var themeSrcPaths = path.join(pathBuild, 'css/themelets/**/_custom.+(css|scss)');
 
 		var injected = false;
 		var themeletSources = false;
