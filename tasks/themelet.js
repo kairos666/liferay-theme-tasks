@@ -83,17 +83,36 @@ module.exports = function(options) {
 			read: false
 		}).pipe(plugins.sort(({
 	            comparator: function(file1, file2) {
-	              if (file1.path.indexOf('lib') > -1 && file1.path.indexOf('core') > -1) {
-	                  return -1;
+	              var fileRegExp = new RegExp(/[^/\\]*$/),
+	                  file1Name = file1.path.replace(file1.base,'').match(fileRegExp),
+	                  file2Name = file2.path.replace(file2.base,'').match(fileRegExp),
+	                  file1ThemeletPath = file1.path.replace(file1.base,'').replace(file1Name,''),
+	                  file2ThemeletPath = file2.path.replace(file2.base,'').replace(file2Name,''),
+	                  isFile1PriorityLib = (file1ThemeletPath.indexOf('lib') > -1) ? true : false,
+	                  isFile2PriorityLib = (file2ThemeletPath.indexOf('lib') > -1) ? true : false,
+	                  isFile1PriorityCore = (file1ThemeletPath.indexOf('core') > -1) ? true : false,
+	                  isFile2PriorityCore = (file2ThemeletPath.indexOf('core') > -1) ? true : false;
+	
+	              //strongest criteria --> libraries first
+	              if (isFile1PriorityLib && !isFile2PriorityLib) {
+	                return -1;
 	              }
-	              if (file2.path.indexOf('lib') > -1 && file2.path.indexOf('core') > -1) {
-	                  return 1;
+	              if (!isFile1PriorityLib && isFile2PriorityLib) {
+	                return 1;
 	              }
-	              if (file1.path.indexOf('lib') > -1) {
-	                  return -1;
+	              //medium criteria --> core first
+	              if (isFile1PriorityCore && !isFile2PriorityCore) {
+	                return -1;
 	              }
-	              if (file2.path.indexOf('lib') > -1) {
-	                  return 1;
+	              if (!isFile1PriorityCore && isFile2PriorityCore) {
+	                return 1;
+	              }
+	              //weak criteria --> alphabetical order
+	              if (file1Name < file2Name) {
+	                return -1;
+	              }
+	              if (file1Name > file2Name) {
+	                return 1;
 	              }
 	              return 0;
 	            }
