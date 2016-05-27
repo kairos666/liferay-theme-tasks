@@ -81,7 +81,23 @@ module.exports = function(options) {
 
 		var sources = gulp.src(themeSrcPaths, {
 			read: false
-		}).pipe(plugins.sort())
+		}).pipe(plugins.sort(({
+	            comparator: function(file1, file2) {
+	              if (file1.path.indexOf('lib') > -1 && file1.path.indexOf('core') > -1) {
+	                  return -1;
+	              }
+	              if (file2.path.indexOf('lib') > -1 && file2.path.indexOf('core') > -1) {
+	                  return 1;
+	              }
+	              if (file1.path.indexOf('lib') > -1) {
+	                  return -1;
+	              }
+	              if (file2.path.indexOf('lib') > -1) {
+	                  return 1;
+	              }
+	              return 0;
+	            }
+	          })))
 		  .pipe(vinylPaths(function(path, cb) {
 			themeletSources = true;
 
