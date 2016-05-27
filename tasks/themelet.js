@@ -22,11 +22,24 @@ module.exports = function(options) {
 
 	gulp.task('build:themelets', function(cb) {
 		runSequence(
+			['build:themelet-lint-css'],
 			['build:themelet-css', 'build:themelet-images', 'build:themelet-js', 'build:themelet-templates'],
 			['build:themelet-css-inject', 'build:themelet-js-inject'],
 			cb
 		);
 	});
+	
+	gulp.task('build:themelet-lint-css', function(){
+	        getThemeletSrcPaths('.+(css|scss)').map(function(themeletSrcPath){
+		        gulp.src(themeletSrcPath)
+			        .pipe(plugins.stylelint({
+				        reporters: [
+				        	{ formatter: 'verbose', console: true }
+				        ]
+			        }))
+			        .on('error', gutil.log)
+	        });
+    	});
 
 	gulp.task('build:themelet-css', function(cb) {
 		buildStaticThemeletFiles('css', '.+(css|scss)', cb);
